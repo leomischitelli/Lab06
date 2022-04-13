@@ -1,23 +1,26 @@
 package it.polito.tdp.meteo.model;
 
+import java.time.Month;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Citta {
 	
 	
 	private String nome;
-	private List<Rilevamento> rilevamenti;
+	private List<Rilevamento> rilevamenti; //salvo i rilevamenti della citta, in questo caso solo quelli del mese interessato
 	private int counter = 0;
 	
 	
 	
 	public Citta(String nome) {
 		this.nome = nome;
+		rilevamenti = new ArrayList();
 	}
 	
-	public Citta(String nome, List<Rilevamento> rilevamenti) {
+	public Citta(String nome, List<Rilevamento> rilevamenti) { //non so se lo utilizzero
 		this.nome = nome;
-		this.rilevamenti = rilevamenti;
+		setRilevamenti(rilevamenti);
 	}
 
 	public String getNome() {
@@ -31,9 +34,14 @@ public class Citta {
 	public List<Rilevamento> getRilevamenti() {
 		return rilevamenti;
 	}
+	
+	public void addRilevamento (Rilevamento rilevamento) {
+		rilevamenti.add(rilevamento);
+	}
+	
 
 	public void setRilevamenti(List<Rilevamento> rilevamenti) {
-		this.rilevamenti = rilevamenti;
+		this.rilevamenti.addAll(rilevamenti);
 	}
 
 	public int getCounter() {
@@ -76,6 +84,12 @@ public class Citta {
 	@Override
 	public String toString() {
 		return nome;
+	}
+
+	public void resetAll() {
+		rilevamenti.clear();
+		counter = 0;
+		
 	}
 	
 

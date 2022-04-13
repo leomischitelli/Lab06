@@ -14,7 +14,7 @@ public class TestMeteoDAO {
 
 		// STAMPA: localita, giorno, mese, anno, umidita (%)
 		for (Rilevamento r : list) {
-			System.out.format("%-10s %2td/%2$2tm/%2$4tY %3d%%\n", r.getLocalita(), r.getData(), r.getUmidita());
+			System.out.format("%-10s %2td/%2$2tm/%2$4tY %3d%%\n", r.getCitta(), r.getData(), r.getUmidita());
 		}
 		
 //		System.out.println(dao.getAllRilevamentiLocalitaMese(1, "Genova"));
