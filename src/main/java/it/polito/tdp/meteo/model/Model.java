@@ -15,10 +15,12 @@ public class Model {
 	private final static int NUMERO_GIORNI_TOTALI = 15;
 
 	private MeteoDAO meteoDAO;
+	private List<Citta> listaCitta;
 	
 	
 	public Model() {
 		this.meteoDAO = new MeteoDAO();
+		this.listaCitta = new ArrayList<Citta>();
 		
 	}
 
@@ -33,6 +35,7 @@ public class Model {
 		return null;
 		
 	}
+	
 
 	private void sequenza_ricorsiva(List<Rilevamento> sequenzaAttuale, int livello) {
 			
