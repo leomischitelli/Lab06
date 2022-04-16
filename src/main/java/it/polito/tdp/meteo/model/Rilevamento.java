@@ -4,22 +4,22 @@ import java.util.Date;
 
 public class Rilevamento {
 	
-	private Citta citta;
+	private String localita;
 	private Date data;
 	private int umidita;
 
-	public Rilevamento(Citta citta, Date data, int umidita) {
-		this.citta = citta;
+	public Rilevamento(String localita, Date data, int umidita) {
+		this.localita = localita;
 		this.data = data;
 		this.umidita = umidita;
 	}
 
-	public Citta getCitta() {
-		return citta;
+	public String getLocalita() {
+		return localita;
 	}
 
-	public void setCitta(Citta citta) {
-		this.citta = citta;
+	public void setLocalita(String localita) {
+		this.localita = localita;
 	}
 
 	public Date getData() {

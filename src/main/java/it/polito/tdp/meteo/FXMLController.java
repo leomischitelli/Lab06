@@ -43,7 +43,7 @@ public class FXMLController {
     void doCalcolaSequenza(ActionEvent event) {
     	List<Rilevamento> sequenza = this.model.trovaSequenza(boxMese.getValue());
     	for(Rilevamento r : sequenza) {
-    		txtResult.appendText(r.getCitta().toString() + "\n");
+    		txtResult.appendText(r.getLocalita().toString() + "\n");
     	}
 
     }
