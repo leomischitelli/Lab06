@@ -25,8 +25,7 @@ public class MeteoDAO {
 			ResultSet rs = st.executeQuery();
 
 			while (rs.next()) {
-				Citta c = new Citta(rs.getString("Localita"));
-				Rilevamento r = new Rilevamento( c, rs.getDate("Data"), rs.getInt("Umidita"));
+				Rilevamento r = new Rilevamento(rs.getString("Localita"), rs.getDate("Data"), rs.getInt("Umidita"));
 				rilevamenti.add(r);
 			}
 
@@ -56,9 +55,7 @@ public class MeteoDAO {
 			ResultSet rs = st.executeQuery();
 
 			while (rs.next()) {
-
-				Citta c = new Citta(rs.getString("Localita"));
-				Rilevamento r = new Rilevamento( c, rs.getDate("Data"), rs.getInt("Umidita"));
+				Rilevamento r = new Rilevamento(rs.getString("Localita"), rs.getDate("Data"), rs.getInt("Umidita"));
 				rilevamenti.add(r);
 			}
 

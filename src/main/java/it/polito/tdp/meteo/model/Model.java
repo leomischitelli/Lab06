@@ -1,6 +1,7 @@
 package it.polito.tdp.meteo.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -15,15 +16,15 @@ public class Model {
 	private final static int NUMERO_GIORNI_TOTALI = 15;
 
 	private MeteoDAO meteoDAO;
-	private List<Rilevamento> sequenzaMigliore;
+	private List<Citta> sequenzaMigliore;
 	private int costoMinimo; 
-	private List<Citta> listaCitta;
+	private Set<Citta> setCitta;
 	
 	public Model() {
 		this.meteoDAO = new MeteoDAO();
-		this.sequenzaMigliore = new ArrayList<Rilevamento>();
+		this.sequenzaMigliore = new ArrayList<Citta>();
 		costoMinimo = -1;
-		this.listaCitta = new ArrayList<Citta>();
+		this.setCitta = new HashSet<Citta>();
 	}
 
 	// of course you can change the String output with what you think works best
@@ -32,27 +33,28 @@ public class Model {
 	}
 	
 	// of course you can change the String output with what you think works best
-	public List<Rilevamento> trovaSequenza(int mese) {
+	public List<Citta> trovaSequenza(int mese) {
 		
-		List<Rilevamento> sequenzaAttuale = new ArrayList<Rilevamento>();
+		List<Citta> sequenzaAttuale = new ArrayList<Citta>();
+		int livello;
+		
 		
 		sequenzaAttuale.clear();
 		
 		for(Citta c : this.meteoDAO.getAllLocalitaMese(mese)) {
 			//salvo i rilevamenti in ogni citta
 			c.setRilevamenti(meteoDAO.getAllRilevamentiLocalitaMese(mese, c.getNome()));
-			listaCitta.add(c);
+			setCitta.add(c);
 		}
 		
-		for(Citta c : listaCitta) {
-			for(int i=0; i<3; i++) {
-				Rilevamento r = c.getRilevamenti().get(i);
-				sequenzaAttuale.add(r);
+		for(Citta c : setCitta) {
+/*			for(livello=0; livello<3; livello++) {
+				sequenzaAttuale.add(c);
 				c.increaseCounter();
-			}
+			} */
 			
-			sequenza_ricorsiva(sequenzaAttuale, 3); //livello da 0 a 14
-			for(Citta cc : listaCitta) {
+			sequenza_ricorsiva(sequenzaAttuale, 0); //livello da 0 a 14
+			for(Citta cc : setCitta) {
 				cc.resetAll();
 			}
 			sequenzaAttuale.clear();
@@ -63,63 +65,62 @@ public class Model {
 		
 	}
 
-	private void sequenza_ricorsiva(List<Rilevamento> sequenzaAttuale, int livello) {
+	private boolean sequenza_ricorsiva(List<Citta> sequenzaAttuale, int livello) {
 		
-		if(sequenzaAttuale.size() == 15) {
-			//caso terminale, calcola costo, fai cose, verifica presenza di tutte le citta
-			List<Citta> controllo = new ArrayList<Citta>();
-			for(Rilevamento r : sequenzaAttuale) {
-				if(!controllo.contains(r.getCitta()))
-					controllo.add(r.getCitta());
+		if(sequenzaAttuale.size() == NUMERO_GIORNI_TOTALI) {
+			//controllare che ci sia ogni citta almeno una volta
+	
+			for(Citta c : sequenzaAttuale) {
+				if(!setCitta.contains(c))
+					return false; //false
 			}
-			if(listaCitta.size() != controllo.size())
-				return;
 			
-			//ogni citta e' presente almeno una volta
-			
-			int costoAttuale = sequenzaAttuale.get(0).getUmidita();
-			for(int i = 1; i < 15; i++) {
-				costoAttuale += sequenzaAttuale.get(i).getUmidita();
-				if(!sequenzaAttuale.get(i).getCitta().equals(sequenzaAttuale.get(i-1).getCitta()))
+			//tutte le citta sono presenti almeno una volta
+			int costoAttuale = 0; //umidita del primo rilevamento della prima citta
+		
+			for(int i=0; i<NUMERO_GIORNI_TOTALI; i++) {
+				costoAttuale += sequenzaAttuale.get(i).getRilevamenti().get(i).getUmidita();
+				if(i>0 && !sequenzaAttuale.get(i).equals(sequenzaAttuale.get(i-1))) //citta diversa dalla precedente
 					costoAttuale += COST;
 			}
 			
-			if(costoAttuale < costoMinimo) {
+			if(costoAttuale < costoMinimo || costoMinimo < 0) { //costoMinimo settato a -1 per iniziare
 				costoMinimo = costoAttuale;
 				sequenzaMigliore.clear();
 				sequenzaMigliore.addAll(sequenzaAttuale);
-			}
-		}
-		
-		Rilevamento ultimoRilevamento = sequenzaAttuale.get(sequenzaAttuale.size() - 1);
-		Citta ultimaCitta = ultimoRilevamento.getCitta();
-		int ultimoCounter = ultimaCitta.getCounter();
-		
-		if(ultimoCounter > 0 && ultimoCounter < 3) {
-			while(ultimoCounter < 3 && sequenzaAttuale.size() < 15) {
 				
-				Rilevamento r = ultimaCitta.getRilevamenti().get(livello);
-				sequenzaAttuale.add(r);
-				ultimaCitta.increaseCounter();
-				livello++;
+				return true; //true
 			}
-			sequenza_ricorsiva(sequenzaAttuale, livello);
-		}
-	
-		for(Citta c : listaCitta) {
-			int counter = c.getCounter();
-			if(counter < 6) { //se c = 6 salta la citta
-				Rilevamento r = c.getRilevamenti().get(livello);
-				sequenzaAttuale.add(r);
-				c.increaseCounter();
-				sequenza_ricorsiva(sequenzaAttuale, livello + 1);
-				sequenzaAttuale.remove(sequenzaAttuale.size() - 1);
-			}
+
 		}
 		
 		
+		//seleziono una citta e vedo se supera tutti i controlli
+		for(Citta c : setCitta) {
+			if(c.getCounter() < 6) { //posso inserirlo, altrimenti salta alla prossima citta
+				do {
+					sequenzaAttuale.add(c);
+					c.increaseCounter();
+					livello++;
+				} while (livello < NUMERO_GIORNI_TOTALI && c.getCounter() < 3); //ripete automaticamente i passi finche il counter non arriva a 3
+					
+				sequenza_ricorsiva(sequenzaAttuale, livello);
+				do {
+					//backtracking
+					c.decreaseCounter();
+					sequenzaAttuale.remove(sequenzaAttuale.size() - 1);
+					livello--;
+				} while (c.getCounter() > 0 && c.getCounter() < 3);
+					
+				
+				
+			}
+		}
+		
+		return false; //false, non ho inserito nulla, resetta tutto
 		
 		
+				
 		
 		
 		

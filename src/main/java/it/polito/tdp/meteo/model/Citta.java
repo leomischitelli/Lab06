@@ -87,8 +87,13 @@ public class Citta {
 	}
 
 	public void resetAll() {
-		rilevamenti.clear();
+	//	rilevamenti.clear();
 		counter = 0;
+		
+	}
+
+	public void decreaseCounter() {
+		counter--;
 		
 	}
 	
