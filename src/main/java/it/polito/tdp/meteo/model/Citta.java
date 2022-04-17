@@ -1,6 +1,5 @@
 package it.polito.tdp.meteo.model;
 
-import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +14,7 @@ public class Citta {
 	
 	public Citta(String nome) {
 		this.nome = nome;
-		rilevamenti = new ArrayList();
+		rilevamenti = new ArrayList<Rilevamento>();
 	}
 	
 	public Citta(String nome, List<Rilevamento> rilevamenti) { //non so se lo utilizzero
@@ -95,6 +94,11 @@ public class Citta {
 	public void decreaseCounter() {
 		counter--;
 		
+	}
+
+	public int aumentaCosto(int costoAttuale, int i) {
+		Rilevamento r = rilevamenti.get(i);
+		return r.aumentaCosto(costoAttuale);
 	}
 	
 

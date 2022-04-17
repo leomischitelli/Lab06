@@ -10,7 +10,6 @@ import java.util.ResourceBundle;
 
 import it.polito.tdp.meteo.model.Citta;
 import it.polito.tdp.meteo.model.Model;
-import it.polito.tdp.meteo.model.Rilevamento;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -41,12 +40,15 @@ public class FXMLController {
 
     @FXML
     void doCalcolaSequenza(ActionEvent event) {
-   
+    	
+    	long start = System.currentTimeMillis();
     	txtResult.clear();
     	List<Citta> sequenza = this.model.trovaSequenza(boxMese.getValue());
     	for(Citta c : sequenza) {
     		txtResult.appendText(c.toString() + "\n");
     	}
+    	long end = System.currentTimeMillis();
+    	txtResult.appendText("Tempo di elaborazione: " + Long.toString(end - start) + " ms");
 
     }
 

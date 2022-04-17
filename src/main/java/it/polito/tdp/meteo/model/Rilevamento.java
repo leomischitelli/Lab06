@@ -48,6 +48,10 @@ public class Rilevamento {
 		return String.valueOf(umidita);
 	}
 
+	public int aumentaCosto(int costoAttuale) {
+		return costoAttuale + this.umidita;
+	}
+
 	
 
 }
