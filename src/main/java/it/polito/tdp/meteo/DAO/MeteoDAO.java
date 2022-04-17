@@ -128,7 +128,7 @@ public class MeteoDAO {
 				if(output != "")
 					output+="\n";
 				
-				output += rs.getString("Localita") + " " + Integer.toString(rs.getInt("u"));
+				output += rs.getString("Localita") + " " + Double.toString(rs.getDouble("u"));
 				
 			}
 			

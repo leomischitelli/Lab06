@@ -41,6 +41,7 @@ public class FXMLController {
 
     @FXML
     void doCalcolaSequenza(ActionEvent event) {
+   
     	txtResult.clear();
     	List<Citta> sequenza = this.model.trovaSequenza(boxMese.getValue());
     	for(Citta c : sequenza) {

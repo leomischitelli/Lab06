@@ -36,10 +36,10 @@ public class Model {
 	public List<Citta> trovaSequenza(int mese) {
 		
 		List<Citta> sequenzaAttuale = new ArrayList<Citta>();
-		int livello;
-		
-		
+		setCitta.clear();
 		sequenzaAttuale.clear();
+		sequenzaMigliore.clear();
+		costoMinimo = -1;
 		
 		for(Citta c : this.meteoDAO.getAllLocalitaMese(mese)) {
 			//salvo i rilevamenti in ogni citta
